@@ -83,16 +83,25 @@ final class SigningKey
     private function encodeLength(int $length): string
     {
         if ($length < 0x80) {
-            return chr($length);
+            return $this->chr($length);
         }
 
         $lenBytes = ltrim(pack('N', $length), "\x00");
-        return chr(0x80 | strlen($lenBytes)) . $lenBytes;
+        return $this->chr(0x80 | strlen($lenBytes)) . $lenBytes;
     }
 
     private function asn1(int $tag, string $value): string
     {
-        return chr($tag) . $this->encodeLength(strlen($value)) . $value;
+        return $this->chr($tag) . $this->encodeLength(strlen($value)) . $value;
+    }
+
+    private function chr(int $code): string
+    {
+        if ($code < 0 || $code > 255) {
+            throw new RuntimeException('Code must be between 0 and 255.');
+        }
+
+        return chr($code);
     }
 
     private function encodePkcs8(string $key): string
