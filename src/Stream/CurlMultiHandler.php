@@ -114,7 +114,6 @@ class CurlMultiHandler
 
         curl_multi_remove_handle($curlMultiHandle, $curlHandle);
         curl_multi_close($curlMultiHandle);
-        curl_close($curlHandle);
 
         unset(
             $this->curlHandle,
